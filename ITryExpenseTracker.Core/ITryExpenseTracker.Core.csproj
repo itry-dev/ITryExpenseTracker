@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.5.0" />
+    <PackageReference Include="MediatR" Version="11.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
+    <PackageReference Include="runtime.unix.System.IO.FileSystem" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Features\Categories\Queries\GetCategories\" />
+    <Folder Include="Features\Suppliers\AddNew\" />
+    <Folder Include="Features\Suppliers\Delete\" />
+    <Folder Include="Features\Suppliers\Exceptions\" />
+    <Folder Include="Features\Suppliers\Queries\GetSuppliers\" />
+    <Folder Include="Features\Suppliers\Queries\GetSupplier\" />
+    <Folder Include="Features\Suppliers\Queries\" />
+    <Folder Include="Features\Suppliers\Update\" />
+    <Folder Include="Features\Categories\AddNew\" />
+    <Folder Include="Features\Categories\Update\" />
+    <Folder Include="Features\Expenses\AddNew\" />
+    <Folder Include="Features\Expenses\Delete\" />
+    <Folder Include="Features\Expenses\Update\" />
+    <Folder Include="Features\Expenses\Queries\GetExpense\" />
+    <Folder Include="Features\Expenses\Queries\GetExpenses\" />
+    <Folder Include="Features\Expenses\Queries\GetSum" />
+  </ItemGroup>
+
+</Project>

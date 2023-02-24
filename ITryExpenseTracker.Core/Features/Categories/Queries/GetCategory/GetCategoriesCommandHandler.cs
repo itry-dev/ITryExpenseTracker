@@ -1,0 +1,34 @@
+﻿using MediatR;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using ITryExpenseTracker.Core.Abstractions;
+using ITryExpenseTracker.Core.Features.Categories.Queries.Exceptions;
+using ITryExpenseTracker.Core.OutputModels;
+
+namespace ITryExpenseTracker.Core.Features.Categories.Queries.GetCategory;
+
+public class GetCategoriesCommandHandler : IRequestHandler<GetCategoriesCommand, List<CategoryOutModel>>
+{
+    ICategoryRepo _repo;
+
+    public GetCategoriesCommandHandler(ICategoryRepo repo)
+    {
+        _repo = repo;
+    }
+
+    public async Task<List<CategoryOutModel>> Handle(GetCategoriesCommand request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            return await _repo.GetCategoriesAsync()
+                    .ConfigureAwait(false);
+        }
+        catch (Exception e)
+        {
+            throw new GetCategoriesException(null,e);
+        }
+    }
+}

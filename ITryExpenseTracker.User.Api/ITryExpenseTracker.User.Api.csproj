@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ITryExpenseTracker.Core.Authentication.Abstractions\ITryExpenseTracker.Core.Authentication.Abstractions.csproj" />
+    <ProjectReference Include="..\ITryExpenseTracker.Infrastructure\ITryExpenseTracker.Infrastructure.csproj" />
+    <ProjectReference Include="..\ITryExpenseTracker.User.Infrastructure\ITryExpenseTracker.User.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

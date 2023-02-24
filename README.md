@@ -1,0 +1,3 @@
+# TheMoneyManager
+
+netcore Api

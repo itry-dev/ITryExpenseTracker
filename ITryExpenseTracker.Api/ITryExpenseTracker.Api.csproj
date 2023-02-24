@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>1c2cc7f6-222b-424c-a6a2-a0abdbffab08</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.2" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ITryExpenseTracker.Core.Authentication\ITryExpenseTracker.Core.Authentication.csproj" />
+    <ProjectReference Include="..\ITryExpenseTracker.Infrastructure\ITryExpenseTracker.Infrastructure.csproj" />
+    <ProjectReference Include="..\ITryExpenseTracker.Mapper\ITryExpenseTracker.Mapper.csproj" />
+    <ProjectReference Include="..\ITryExpenseTracker.Migrations\ITryExpenseTracker.Migrations.csproj" />
+    <ProjectReference Include="..\ITryExpenseTracker.User.Api\ITryExpenseTracker.User.Api.csproj" />
+    <ProjectReference Include="..\ITryExpenseTracker.User.Infrastructure\ITryExpenseTracker.User.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

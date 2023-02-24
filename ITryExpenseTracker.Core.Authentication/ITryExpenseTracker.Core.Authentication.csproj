@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ITryExpenseTracker.Core.Authentication.Abstractions\ITryExpenseTracker.Core.Authentication.Abstractions.csproj" />
+    <ProjectReference Include="..\ITryExpenseTracker.Infrastructure\ITryExpenseTracker.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
