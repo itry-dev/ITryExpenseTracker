@@ -9,6 +9,9 @@ namespace ITryExpenseTracker.Migrations;
 
 public class SeedDataInputModel
 {
+    [Required]
+    public bool SeedData { get; set; }
+
     [Required(ErrorMessage = "Admin name cannot be empty")]
     public string AdminName { get; set; }
 

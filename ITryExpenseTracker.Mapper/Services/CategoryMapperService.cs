@@ -18,16 +18,16 @@ public class CategoryMapperService : ICategoryMapperService
 
 
     #region MapModel
-    public CategoryOutModel MapModel(IModelEntity dbEntity)
+    public CategoryOutputModel MapModel(IModelEntity dbEntity)
     {
-        return _mapper.Map<CategoryOutModel>(dbEntity);
+        return _mapper.Map<CategoryOutputModel>(dbEntity);
     }
     #endregion
 
     #region MapModels
-    public List<CategoryOutModel> MapModels(List<IModelEntity> entities)
+    public List<CategoryOutputModel> MapModels(List<IModelEntity> entities)
     {
-        return _mapper.Map<List<CategoryOutModel>>(entities);
+        return _mapper.Map<List<CategoryOutputModel>>(entities);
     }
     #endregion
 }

@@ -62,6 +62,10 @@ public class MigrationController : ControllerBase
             }
         }
 
+        if (!model.SeedData) {
+            return Ok(migrationResult);
+        }
+
         #region adding admin user
         //adding admin user
         try

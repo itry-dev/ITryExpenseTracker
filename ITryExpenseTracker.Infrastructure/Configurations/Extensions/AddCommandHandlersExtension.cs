@@ -14,6 +14,8 @@ using ITryExpenseTracker.Core.Features.Expenses.Update;
 using ITryExpenseTracker.Core.Features.Expenses.Queries.GetExpense;
 using ITryExpenseTracker.Core.Features.Expenses.Queries.GetExpenses;
 using ITryExpenseTracker.Core.Features.Categories.Delete;
+using ITryExpenseTracker.Core.Features.Suppliers.Queries.GetSuppliers;
+using ITryExpenseTracker.Core.Features.Suppliers.AddNew;
 
 namespace ITryExpenseTracker.Infrastructure.Configurations.Extensions;
 
@@ -66,7 +68,19 @@ public static class AddCommandHandlersExtension
         services.AddMediatR(
         typeof(DeleteCategoryCommand),
         typeof(DeleteCategoryCommand));
-        services.AddScoped<IValidator<DeleteCategoryCommand>, DeleteCategoryCommandValidator>(); 
+        services.AddScoped<IValidator<DeleteCategoryCommand>, DeleteCategoryCommandValidator>();
+        #endregion
+
+        #region supplier command, handler
+        services.AddMediatR(
+        typeof(GetSuppliersCommand),
+        typeof(GetSuppliersCommandHandler));
+        services.AddScoped<IValidator<GetSuppliersCommand>, GetSuppliersCommandValidator>();
+
+        services.AddMediatR(
+        typeof(AddNewSupplierCommand),
+        typeof(AddNewSupplierCommandHandler));
+        services.AddScoped<IValidator<AddNewSupplierCommand>, AddNewSupplierCommandValidator>();
         #endregion
 
     }

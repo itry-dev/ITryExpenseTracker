@@ -17,5 +17,6 @@ public static class AddReposExtension
 
         services.AddTransient<ICategoryRepo, CategoryRepo>();
 
+        services.AddTransient<ISupplierRepo, SupplierRepo>();
     }
 }

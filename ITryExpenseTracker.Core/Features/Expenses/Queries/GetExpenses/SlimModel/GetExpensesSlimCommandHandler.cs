@@ -10,7 +10,7 @@ using ITryExpenseTracker.Core.OutputModels;
 
 namespace ITryExpenseTracker.Core.Features.Expenses.Queries.GetExpenses;
 
-public class GetExpensesSlimCommandHandler : IRequestHandler<GetExpensesSlimCommand, ExpenseOutSlimQueryModel>
+public class GetExpensesSlimCommandHandler : IRequestHandler<GetExpensesSlimCommand, ExpenseOutputSlimQueryModel>
 {
     readonly IExpenseRepo _repo;
     readonly IValidator<GetExpensesSlimCommand> _validator;
@@ -21,7 +21,7 @@ public class GetExpensesSlimCommandHandler : IRequestHandler<GetExpensesSlimComm
         _validator = validator;
     }
 
-    public async Task<ExpenseOutSlimQueryModel> Handle(GetExpensesSlimCommand request, CancellationToken cancellationToken)
+    public async Task<ExpenseOutputSlimQueryModel> Handle(GetExpensesSlimCommand request, CancellationToken cancellationToken)
     {
         var result = await _validator.ValidateAsync(request)
                                 .ConfigureAwait(false);

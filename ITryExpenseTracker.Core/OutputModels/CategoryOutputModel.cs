@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ITryExpenseTracker.Core.OutputModels;
 
-public class CategoryOutModel
+public class CategoryOutputModel
 {
     public Guid Id { get; set; }
 

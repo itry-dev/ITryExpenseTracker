@@ -10,7 +10,7 @@ using ITryExpenseTracker.Core.OutputModels;
 
 namespace ITryExpenseTracker.Core.Features.Expenses.Queries.GetExpenses;
 
-public class GetExpensesSlimCommand : IRequest<ExpenseOutSlimQueryModel>
+public class GetExpensesSlimCommand : IRequest<ExpenseOutputSlimQueryModel>
 {
     public readonly DataFilter DataFilter;
     public readonly string UserId;

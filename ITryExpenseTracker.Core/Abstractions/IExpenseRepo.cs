@@ -35,6 +35,6 @@ public interface IExpenseRepo
     /// <exception cref="ITryExpenseTracker.Core.Exceptions.ExpenseSumException">If <paramref name="filter"/>Q filter</exception> is valid but no year passed
     Task<ExpenseSumOutputModel> GetSumAsync(string userId, DataFilter filter);
 
-    Task<ExpenseOutSlimQueryModel> GetExpensesSlimAsync(string userId, DataFilter filter);
+    Task<ExpenseOutputSlimQueryModel> GetExpensesSlimAsync(string userId, DataFilter filter);
 
 }

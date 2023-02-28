@@ -15,6 +15,7 @@ public static class AddModelMapperExtension
     {
         services.AddTransient<IExpenseMapperService, ExpenseMapperService>();
         services.AddTransient<ICategoryMapperService, CategoryMapperService>();
+        services.AddTransient<ISupplierMapperService, SupplierMapperService>();
 
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
     }

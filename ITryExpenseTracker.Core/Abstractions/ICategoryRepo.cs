@@ -9,7 +9,7 @@ namespace ITryExpenseTracker.Core.Abstractions;
 
 public interface ICategoryRepo
 {
-    Task<List<CategoryOutModel>> GetCategoriesAsync();
+    Task<List<CategoryOutputModel>> GetCategoriesAsync();
 
     Task<bool> Exists(Guid categoryId);
     Task AddNewCategoryAsync(string category, bool throwIfExists = true);

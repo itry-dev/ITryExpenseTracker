@@ -37,13 +37,13 @@ public class ExpenseRepo : IExpenseRepo
     }
 
     #region GetExpensesSlimAsync
-    public async Task<ExpenseOutSlimQueryModel> GetExpensesSlimAsync(string userId, DataFilter filter)
+    public async Task<ExpenseOutputSlimQueryModel> GetExpensesSlimAsync(string userId, DataFilter filter)
     {
         var query = _getExpensesQueryByFilters(userId, filter);
 
         if (!await query.AnyAsync().ConfigureAwait(false))
         {
-            return new ExpenseOutSlimQueryModel();
+            return new ExpenseOutputSlimQueryModel();
         }
 
         var totalRows = await query

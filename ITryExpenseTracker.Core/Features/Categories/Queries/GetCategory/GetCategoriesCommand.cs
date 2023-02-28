@@ -8,7 +8,7 @@ using ITryExpenseTracker.Core.OutputModels;
 
 namespace ITryExpenseTracker.Core.Features.Categories.Queries.GetCategory;
 
-public class GetCategoriesCommand : IRequest<List<CategoryOutModel>>
+public class GetCategoriesCommand : IRequest<List<CategoryOutputModel>>
 {
     public GetCategoriesCommand()
     {

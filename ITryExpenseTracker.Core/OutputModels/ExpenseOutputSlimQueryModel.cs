@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ITryExpenseTracker.Core.OutputModels;
 
-public class ExpenseOutputQueryModel {
+public class ExpenseOutputSlimQueryModel
+{
     public int TotalRows { get; set; } = 0;
 
-    public List<ExpenseOutputModel> Entities { get; set; } = new List<ExpenseOutputModel>();
-
+    public List<ExpenseOutputSlimModel> Entities { get; set; } = new List<ExpenseOutputSlimModel>();
 }

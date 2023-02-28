@@ -17,13 +17,12 @@ public class ProfileManager : Profile
     public ProfileManager()
     {
         CreateMap<Expense, ExpenseOutputModel>();
-        CreateMap<Expense, ExpenseOutputSlimModel>();
+        CreateMap<Expense, ExpenseOutputSlimQueryModel>();
 
-        CreateMap<Category, CategoryOutModel>();
-        CreateMap<Supplier, SupplierOutModel>();
-
-        CreateMap<Category, CategoryOutModel>();
-
+        CreateMap<Category, CategoryOutputModel>();
         
+        CreateMap<Supplier, SupplierOutputModel>();
+        CreateMap<Supplier, SupplierOutputQueryModel>();
+
     }
 }

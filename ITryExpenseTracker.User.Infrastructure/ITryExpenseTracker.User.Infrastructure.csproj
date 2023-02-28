@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MailKit" Version="3.5.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="7.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ITryExpenseTracker.Infrastructure\ITryExpenseTracker.Infrastructure.csproj" />
     <ProjectReference Include="..\ITryExpenseTracker.User.Abstractions\ITryExpenseTracker.User.Abstractions.csproj" />
   </ItemGroup>

@@ -29,7 +29,7 @@ public class CategoryRepo : ICategoryRepo
     }
 
     #region GetCategoriesAsync
-    public async Task<List<CategoryOutModel>> GetCategoriesAsync()
+    public async Task<List<CategoryOutputModel>> GetCategoriesAsync()
     {
         var result = await _db.Categories
                     .Where(w => !w.Deleted.HasValue)

@@ -10,8 +10,8 @@ namespace ITryExpenseTracker.Core.Abstractions.Services;
 
 public interface ICategoryMapperService
 {
-    CategoryOutModel MapModel(IModelEntity dbEntity);
+    CategoryOutputModel MapModel(IModelEntity dbEntity);
 
-    List<CategoryOutModel> MapModels(List<IModelEntity> entities);
+    List<CategoryOutputModel> MapModels(List<IModelEntity> entities);
 
 }

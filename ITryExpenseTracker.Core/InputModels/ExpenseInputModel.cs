@@ -29,6 +29,4 @@ public class ExpenseInputModel
     [System.Text.Json.Serialization.JsonIgnore]
     public Guid? Id { get; set; }
 
-    [System.Text.Json.Serialization.JsonIgnore]
-    public Guid? RecurringExpenseId { get; set; }
 }

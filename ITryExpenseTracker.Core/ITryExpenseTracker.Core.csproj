@@ -18,12 +18,8 @@
 
   <ItemGroup>
     <Folder Include="Features\Categories\Queries\GetCategories\" />
-    <Folder Include="Features\Suppliers\AddNew\" />
     <Folder Include="Features\Suppliers\Delete\" />
-    <Folder Include="Features\Suppliers\Exceptions\" />
-    <Folder Include="Features\Suppliers\Queries\GetSuppliers\" />
     <Folder Include="Features\Suppliers\Queries\GetSupplier\" />
-    <Folder Include="Features\Suppliers\Queries\" />
     <Folder Include="Features\Suppliers\Update\" />
     <Folder Include="Features\Categories\AddNew\" />
     <Folder Include="Features\Categories\Update\" />

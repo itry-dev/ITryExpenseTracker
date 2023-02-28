@@ -14,5 +14,5 @@ public interface IExpenseMapperService
 
     ExpenseOutputQueryModel MapModels(List<IModelEntity> entities);
 
-    ExpenseOutSlimQueryModel MapSlimExpensesResultsModel(List<IModelEntity> entities);
+    ExpenseOutputSlimQueryModel MapSlimExpensesResultsModel(List<IModelEntity> entities);
 }

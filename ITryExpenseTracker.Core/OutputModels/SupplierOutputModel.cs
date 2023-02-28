@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace ITryExpenseTracker.Core.OutputModels;
 
-public class SupplierOutModel
-{
+public class SupplierOutputModel {
+
     public Guid Id { get; set; }
 
     public string Name { get; set; }

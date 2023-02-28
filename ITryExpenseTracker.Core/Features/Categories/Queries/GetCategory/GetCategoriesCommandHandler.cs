@@ -10,7 +10,7 @@ using ITryExpenseTracker.Core.OutputModels;
 
 namespace ITryExpenseTracker.Core.Features.Categories.Queries.GetCategory;
 
-public class GetCategoriesCommandHandler : IRequestHandler<GetCategoriesCommand, List<CategoryOutModel>>
+public class GetCategoriesCommandHandler : IRequestHandler<GetCategoriesCommand, List<CategoryOutputModel>>
 {
     ICategoryRepo _repo;
 
@@ -19,7 +19,7 @@ public class GetCategoriesCommandHandler : IRequestHandler<GetCategoriesCommand,
         _repo = repo;
     }
 
-    public async Task<List<CategoryOutModel>> Handle(GetCategoriesCommand request, CancellationToken cancellationToken)
+    public async Task<List<CategoryOutputModel>> Handle(GetCategoriesCommand request, CancellationToken cancellationToken)
     {
         try
         {

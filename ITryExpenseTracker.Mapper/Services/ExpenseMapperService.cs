@@ -39,11 +39,11 @@ public class ExpenseMapperService : IExpenseMapperService
 
     #region MapSlimExpensesResultsModel
 
-    public ExpenseOutSlimQueryModel MapSlimExpensesResultsModel(List<IModelEntity> entities)
+    public ExpenseOutputSlimQueryModel MapSlimExpensesResultsModel(List<IModelEntity> entities)
     {
         var mapped = _mapper.Map<List<IModelEntity>, List<ExpenseOutputSlimModel>>(entities);
 
-        return new ExpenseOutSlimQueryModel
+        return new ExpenseOutputSlimQueryModel
         {
             Entities = mapped
         };

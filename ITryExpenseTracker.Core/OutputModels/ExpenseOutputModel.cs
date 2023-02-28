@@ -22,9 +22,9 @@ public class ExpenseOutputModel
 
     public string Notes { get; set; } = null;
 
-    public CategoryOutModel Category { get; set; } = null;
+    public CategoryOutputModel Category { get; set; } = null;
 
-    public SupplierOutModel Supplier { get; set; } = null;
+    public ExpenseOutputModel Supplier { get; set; } = null;
 
     public RecurringExpenseOutputModel RecurringExpense { get; set; } = null;    
 }
