@@ -11,7 +11,8 @@ builder.ConfigureAppConfiguration(builder =>
 {
     builder.AddConfiguration(
         new ConfigurationBuilder()        
-        .AddUserSecrets<UserSecret>()
+        /*.AddUserSecrets<UserSecret>()*/
+        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
         .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
         .AddEnvironmentVariables()
         .Build());
@@ -19,8 +20,9 @@ builder.ConfigureAppConfiguration(builder =>
 });
 builder.ConfigureServices((context, services) =>
 {
+    services.Configure<UserSecret>(context.Configuration.GetSection(nameof(UserSecret)));
     services.AddSingleton<IExpenseService, ExpenseService>();
-    services.AddDbContext(context.Configuration.GetSection(nameof(UserSecret))["DefaultConnection"]);
+    services.AddDbContext(context.Configuration.GetValue<string>("UserSecret:DefaultConnection"));
 });
 
 using IHost host = builder.Build();
