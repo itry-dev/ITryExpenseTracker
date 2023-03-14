@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ITryExpenseTracker.Core.OutputModels;
 
-namespace ITryExpenseTracker.Core.Features.Categories.Queries.GetCategory;
+namespace ITryExpenseTracker.Core.Features.Categories.Queries.GetCategories;
 
 public class GetCategoriesCommand : IRequest<List<CategoryOutputModel>>
 {

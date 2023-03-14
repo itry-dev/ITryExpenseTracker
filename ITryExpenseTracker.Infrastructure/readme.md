@@ -1,3 +1,3 @@
 ## Database infrastructure project
 
-It handles the comunication with the database layer.
+It handles comunications with the database layer using what is defined in **ITryExpenseTracjer.Core**.

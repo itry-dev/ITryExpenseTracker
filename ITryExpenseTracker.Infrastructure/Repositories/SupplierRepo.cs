@@ -74,14 +74,15 @@ public class SupplierRepo : ISupplierRepo
     public async Task UpdateAsync(string userId, SupplierInputModel model)
     {
         if (!model.Id.HasValue) {
-            throw new SupplierNotFoundException("id cannot be null");
+            throw new SupplierException("supplier id cannot be null");
         }
 
         if (!await Exists(model.Id.Value, userId).ConfigureAwait(false)) {
             throw new SupplierNotFoundException(model.Id.GetValueOrDefault().ToString());
         }
 
-        var dbModel = await _db.Suppliers.FilterByUserId(userId)
+        var dbModel = await _db.Suppliers
+                        .FilterByUserId(userId)
                         .Where(w => w.Id == model.Id.Value)
                         .FirstOrDefaultAsync()
                         .ConfigureAwait(false);
@@ -96,7 +97,8 @@ public class SupplierRepo : ISupplierRepo
     #region AddNewAsync
     public async Task<SupplierOutputModel> AddNewAsync(string userId, SupplierInputModel model)
     {
-        var row = await _db.Suppliers.FilterByUserId(userId)
+        var row = await _db.Suppliers
+                    .FilterByUserId(userId)
                     .Where(w => w.Name == model.Name)
                     .FirstOrDefaultAsync()
                     .ConfigureAwait(false);  
@@ -117,6 +119,29 @@ public class SupplierRepo : ISupplierRepo
 
         return await _getSupplierOutModel(row.Id);
 
+    }
+    #endregion
+
+    #region DeleteAsync
+    public async Task DeleteAsync(Guid id, string userId) {
+        if (! await Exists(id, userId)) {
+            return;
+        }
+
+        var isInUse = await _db.Expenses
+                        .FilterByUserId(userId)
+                        .Where(w => w.SupplierId == id)
+                        .AnyAsync()
+                        .ConfigureAwait(false);
+
+        if (isInUse) {
+            throw new SupplierInUseException(id.ToString());
+        }
+
+        _db.Suppliers.Remove(_db.Suppliers.Where(w => w.Id == id).First());
+
+        await _db.SaveChangesAsync()
+                .ConfigureAwait(false);
     }
     #endregion
 

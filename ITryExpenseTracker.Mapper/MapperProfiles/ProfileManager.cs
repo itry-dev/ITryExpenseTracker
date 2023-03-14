@@ -17,7 +17,7 @@ public class ProfileManager : Profile
     public ProfileManager()
     {
         CreateMap<Expense, ExpenseOutputModel>();
-        CreateMap<Expense, ExpenseOutputSlimQueryModel>();
+        CreateMap<Expense, ExpenseOutputSlimModel>();
 
         CreateMap<Category, CategoryOutputModel>();
         

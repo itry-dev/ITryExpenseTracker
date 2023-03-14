@@ -8,7 +8,7 @@ using ITryExpenseTracker.Core.Authentication.Abstractions.Abstractions;
 using ITryExpenseTracker.Core.Authentication.Abstractions.InputModels;
 using ITryExpenseTracker.Infrastructure;
 
-namespace ITryExpenseTracker.Core.Authentication.Controllers;
+namespace ITryExpenseTracker.Core.Authentication;
 
 [ApiController]
 [Route("private/api/v1/login")]
@@ -19,7 +19,7 @@ public class LoginController : ControllerBase
 
     public LoginController(IUserService userService)
     {
-        _userService= userService;
+        _userService = userService;
     }
 
     [HttpPost]
@@ -30,9 +30,11 @@ public class LoginController : ControllerBase
             return BadRequest(new ClientErrorData { Title = "Invalid login" });
         }
 
-        var userModel = await _userService.Login(new LoginInputModel { 
-            UserName = model.UserName, 
-            Password= model.Password }
+        var userModel = await _userService.Login(new LoginInputModel
+        {
+            UserName = model.UserName,
+            Password = model.Password
+        }
         );
 
         return Ok(userModel);

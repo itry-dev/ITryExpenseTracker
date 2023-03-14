@@ -49,6 +49,18 @@ public class BaseTestClass
     }
     #endregion
 
+    #region GetCategoriesRoute
+    protected string GetCategoriesRoute() {
+        return "private/api/v1/categories";
+    }
+    #endregion
+
+    #region GetSuppliersRoute
+    protected string GetSuppliersRoute() {
+        return "private/api/v1/suppliers";
+    }
+    #endregion
+
     #region GetRecurringExpenseMainRoute
     protected string GetRecurringExpensesMainRoute()
     {

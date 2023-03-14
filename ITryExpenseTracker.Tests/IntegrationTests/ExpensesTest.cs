@@ -12,11 +12,11 @@ using Xunit.Abstractions;
 
 namespace ITryExpenseTracker.Tests.IntegrationTests
 {
-    public class ExpensesTests : BaseIntegrationTest
+    public class ExpensesTest : BaseIntegrationTest
     {
         private readonly ITestOutputHelper _testOutputHelper;
 
-        public ExpensesTests(CustomWebApplicationFactory<Program> factory, ITestOutputHelper testOutputHelper) : base(factory)
+        public ExpensesTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper testOutputHelper) : base(factory)
         { 
             _testOutputHelper = testOutputHelper;
         }

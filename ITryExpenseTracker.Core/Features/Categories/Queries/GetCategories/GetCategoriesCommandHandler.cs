@@ -8,7 +8,7 @@ using ITryExpenseTracker.Core.Abstractions;
 using ITryExpenseTracker.Core.Features.Categories.Queries.Exceptions;
 using ITryExpenseTracker.Core.OutputModels;
 
-namespace ITryExpenseTracker.Core.Features.Categories.Queries.GetCategory;
+namespace ITryExpenseTracker.Core.Features.Categories.Queries.GetCategories;
 
 public class GetCategoriesCommandHandler : IRequestHandler<GetCategoriesCommand, List<CategoryOutputModel>>
 {
@@ -28,7 +28,7 @@ public class GetCategoriesCommandHandler : IRequestHandler<GetCategoriesCommand,
         }
         catch (Exception e)
         {
-            throw new GetCategoriesException(null,e);
+            throw new GetCategoriesException(null, e);
         }
     }
 }

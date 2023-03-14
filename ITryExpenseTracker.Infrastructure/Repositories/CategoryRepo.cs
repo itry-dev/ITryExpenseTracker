@@ -12,6 +12,7 @@ using ITryExpenseTracker.Core.OutputModels;
 using ITryExpenseTracker.Infrastructure.Configurations.Extensions;
 using ITryExpenseTracker.Core.Exceptions;
 using ITryExpenseTracker.Infrastructure.Models;
+using ITryExpenseTracker.Core.InputModels;
 
 namespace ITryExpenseTracker.Infrastructure.Repositories;
 
@@ -52,22 +53,22 @@ public class CategoryRepo : ICategoryRepo
     }
     #endregion
 
-    #region AddNewCategoryAsync
-    public async Task AddNewCategoryAsync(string category, bool throwIfExists = true)
+    #region AddCategoryAsync
+    public async Task<CategoryOutputModel> AddCategoryAsync(CategoryInputModel model, bool throwIfExists = true)
     {
-        var row = await _db.Categories.Where(c => c.Name == category)
+        var row = await _db.Categories.Where(c => c.Name == model.Name)
                     .AnyAsync()
                     .ConfigureAwait(false);
 
         if (row && throwIfExists)
         {
-            throw new CategoryExistsException(category);
+            throw new CategoryExistsException(model.Name);
         }
 
         var c = new Category
         {
             Id = Guid.NewGuid(),
-            Name = category,
+            Name = model.Name,
             CreatedAt = DateTime.UtcNow,
             CreatedBy = "CategoryRepo"
         };
@@ -77,6 +78,32 @@ public class CategoryRepo : ICategoryRepo
 
         await _db.SaveChangesAsync()
                 .ConfigureAwait(false);
+
+        return new CategoryOutputModel { Id = c.Id, Name = model.Name };
+    }
+    #endregion
+
+    #region UpdateCategoryAsync
+    public async Task<CategoryOutputModel?> UpdateCategoryAsync(CategoryInputModel model) {
+        var row = await _db.Categories.Where(c => c.Id == model.Id)
+                    .FirstOrDefaultAsync()
+                    .ConfigureAwait(false);
+
+        if (row == null) {
+            return null;
+        }
+
+        row.Name = model.Name;
+        
+        _db.Categories.Update(row);
+
+        await _db.SaveChangesAsync()
+                .ConfigureAwait(false);
+
+        return new CategoryOutputModel {
+            Id = row.Id,
+            Name = model.Name
+        };
     }
     #endregion
 
@@ -95,7 +122,8 @@ public class CategoryRepo : ICategoryRepo
 
 
 
-        var c = await _db.Categories.Where(w => w.Id == categoryId)
+        var c = await _db.Categories
+                .Where(w => w.Id == categoryId)
                 .FirstOrDefaultAsync()
                 .ConfigureAwait(false);
 
@@ -111,4 +139,5 @@ public class CategoryRepo : ICategoryRepo
                     
     }
     #endregion
+
 }

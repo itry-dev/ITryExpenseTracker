@@ -4,11 +4,11 @@ public static class Constants
 {
     public static class UserRoles
     {
-        public static string[] ALL_ROLES = { "admin","user" };
-
         public static string ADMIN = "admin";
 
         public static string USER = "user";
+
+        public static string[] ALL_ROLES = { ADMIN, USER };
     }
 
     public static class Recurrence

@@ -2,7 +2,9 @@
 using ITryExpenseTracker.Core.Features.Expenses.AddNew;
 using ITryExpenseTracker.Core.Features.Expenses.Queries.GetExpenses;
 using ITryExpenseTracker.Core.Features.Suppliers.AddNew;
+using ITryExpenseTracker.Core.Features.Suppliers.Delete;
 using ITryExpenseTracker.Core.Features.Suppliers.Queries.GetSuppliers;
+using ITryExpenseTracker.Core.Features.Suppliers.Update;
 using ITryExpenseTracker.Core.InputModels;
 using ITryExpenseTracker.Core.OutputModels;
 using MediatR;
@@ -42,6 +44,27 @@ public class SupplierController : BaseController {
             .ConfigureAwait(false);
 
         return Ok(result);
+    }
+    #endregion
+
+    #region Update
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> Update(Guid id, SupplierInputModel model) {
+        model.Id = id;
+        var result = await _mediator.Send(new UpdateSupplierCommand(GetSessionUserId(), model))
+            .ConfigureAwait(false);
+
+        return Ok(result);
+    }
+    #endregion
+
+    #region Delete
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete(Guid id) {
+        await _mediator.Send(new DeleteSupplierCommand(GetSessionUserId(), id))
+            .ConfigureAwait(false);
+
+        return Ok();
     }
     #endregion
 }

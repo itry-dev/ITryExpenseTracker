@@ -38,6 +38,14 @@ public class CategoryException : Exception
     public CategoryException(Exception e, string message) : base(message, e) { }
 }
 
+public class SupplierException : Exception {
+    public SupplierException(string message) : base(message) { }
+}
+
 public class SupplierNotFoundException : Exception {
     public SupplierNotFoundException(string message) : base(message) { }
+}
+
+public class SupplierInUseException : Exception {
+    public SupplierInUseException(string message) : base(message) { }
 }

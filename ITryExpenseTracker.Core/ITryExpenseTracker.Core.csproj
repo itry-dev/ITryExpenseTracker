@@ -17,12 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Categories\Queries\GetCategories\" />
-    <Folder Include="Features\Suppliers\Delete\" />
     <Folder Include="Features\Suppliers\Queries\GetSupplier\" />
-    <Folder Include="Features\Suppliers\Update\" />
-    <Folder Include="Features\Categories\AddNew\" />
-    <Folder Include="Features\Categories\Update\" />
     <Folder Include="Features\Expenses\AddNew\" />
     <Folder Include="Features\Expenses\Delete\" />
     <Folder Include="Features\Expenses\Update\" />

@@ -26,3 +26,15 @@ public class AddNewSupplierException : BaseException {
     public AddNewSupplierException(Exception e, string message) : base(HttpStatusCode.BadRequest, message, e) { }
 }
 
+public class UpdateSupplierException : BaseException {
+    public UpdateSupplierException(string message) : base(HttpStatusCode.BadRequest, message) { }
+
+    public UpdateSupplierException(Exception e, string message) : base(HttpStatusCode.BadRequest, message, e) { }
+}
+
+public class DeleteSupplierException : BaseException {
+    public DeleteSupplierException(string message) : base(HttpStatusCode.BadRequest, message) { }
+
+    public DeleteSupplierException(Exception e, string message) : base(HttpStatusCode.BadRequest, message, e) { }
+}
+

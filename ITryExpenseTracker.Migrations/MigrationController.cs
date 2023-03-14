@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
 
-namespace ITryExpenseTracker.Migrations.Controllers;
+namespace ITryExpenseTracker.Migrations;
 
 [ApiController]
 [Route("private/api/v1/migrations")]
@@ -29,15 +29,15 @@ public class MigrationController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<Microsoft.AspNetCore.Mvc.IActionResult> RunMigrations(SeedDataInputModel model)
+    public async Task<IActionResult> RunMigrations(SeedDataInputModel model)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        if (!Request.Headers.Any(a => a.Key == MIGRATIONS_AUTH_KEY) 
-            || (Request.Headers[MIGRATIONS_AUTH_KEY] != MIGRATIONS_AUTH_VALUE))
+        if (!Request.Headers.Any(a => a.Key == MIGRATIONS_AUTH_KEY)
+            || Request.Headers[MIGRATIONS_AUTH_KEY] != MIGRATIONS_AUTH_VALUE)
         {
             return Unauthorized();
         }
@@ -54,7 +54,7 @@ public class MigrationController : ControllerBase
                 await _db.Database.MigrateAsync()
                         .ConfigureAwait(false);
 
-                migrationResult.AppliedMigrations = pendingMigrations.ToArray(); 
+                migrationResult.AppliedMigrations = pendingMigrations.ToArray();
             }
             catch (Exception e)
             {
@@ -62,7 +62,8 @@ public class MigrationController : ControllerBase
             }
         }
 
-        if (!model.SeedData) {
+        if (!model.SeedData)
+        {
             return Ok(migrationResult);
         }
 
@@ -70,7 +71,7 @@ public class MigrationController : ControllerBase
         //adding admin user
         try
         {
-            await _userService.AddNewRoleAsync(ITryExpenseTracker.Core.Constants.UserRoles.ADMIN);
+            await _userService.AddNewRoleAsync(Core.Constants.UserRoles.ADMIN);
             migrationResult.RoleCreatedResult = "OK";
 
             try
@@ -80,7 +81,7 @@ public class MigrationController : ControllerBase
                     Email = model.AdminEmail,
                     Name = model.AdminName,
                     UserName = model.AdminUsername,
-                    UserRole = ITryExpenseTracker.Core.Constants.UserRoles.ADMIN,
+                    UserRole = Core.Constants.UserRoles.ADMIN,
                     Password = model.AdminPassword,
                     EmailConfirmed = true
                 });
@@ -103,14 +104,14 @@ public class MigrationController : ControllerBase
         {
             try
             {
-                await _categoryRepo.AddNewCategoryAsync(category: category, throwIfExists: false)
+                await _categoryRepo.AddCategoryAsync(new Core.InputModels.CategoryInputModel { Name = category }, throwIfExists: false)
                             .ConfigureAwait(false);
             }
             catch (Exception e)
             {
                 migrationResult.CategoriesCreatedResult.Add(e.Message);
             }
-            
+
         }
         #endregion
 

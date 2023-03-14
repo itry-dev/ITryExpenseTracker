@@ -58,16 +58,18 @@ public class BaseIntegrationTest
     #endregion
 
     #region AddUserWithRole
-    protected async Task<ApplicationUser> AddUserWithRole(Guid userId, string username, string password,string role)
+    protected async Task<ApplicationUser> AddUserWithRole(Guid userId, string username, string password, string role)
     {
+        _checkUserRole(role);
+
         using (var scope = Factory.Services.CreateScope())
         {
             var scopedServices = scope.ServiceProvider;
             var userService = scopedServices.GetRequiredService<IUserService>();
 
-            await userService.AddNewRoleAsync(ITryExpenseTracker.Core.Constants.UserRoles.ADMIN);
+            await userService.AddNewRoleAsync(role);
 
-            var response = await userService.AddNewUserAsync(GetUserInputModel(userId, username, password, ITryExpenseTracker.Core.Constants.UserRoles.ADMIN));
+            var response = await userService.AddNewUserAsync(GetUserInputModel(userId, username, password, role));
 
             return new ApplicationUser
             {
@@ -104,6 +106,8 @@ public class BaseIntegrationTest
 
         Assert.NotNull(loginResponse);
         Assert.True(!string.IsNullOrEmpty(loginResponse.Token));
+
+        HttpClient.DefaultRequestHeaders.Remove("Authorization");
 
         HttpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + loginResponse.Token);
     }
@@ -177,6 +181,16 @@ public class BaseIntegrationTest
     protected ITryExpenseTracker.Core.OutputModels.ErrorDetailsOutputModel GetErrorResponseModel(string model)
     {
         return System.Text.Json.JsonSerializer.Deserialize<ITryExpenseTracker.Core.OutputModels.ErrorDetailsOutputModel>(model);            
+    }
+    #endregion
+
+    #region _checkUserRole
+    private void _checkUserRole(string role) {
+        if (!string.IsNullOrEmpty(role)) {
+            if (!ITryExpenseTracker.Core.Constants.UserRoles.ALL_ROLES.Contains(role)) {
+                throw new Exception("Invalid role supplied: " + role);
+            }
+        }
     }
     #endregion
 }

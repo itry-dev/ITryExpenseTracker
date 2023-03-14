@@ -10,4 +10,5 @@ public class ScannerExceptions : Exception {
     public ScannerExceptions(string message) : base(message) { }
 
     public ScannerExceptions(string message, Exception e) : base(message, e) { }
+
 }

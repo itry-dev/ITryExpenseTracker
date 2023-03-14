@@ -1,3 +1,3 @@
-## Authentication process
+## Authentication process Api
 
-It handles the authentication process using the controller **LoginController**
+It handles the user login process.

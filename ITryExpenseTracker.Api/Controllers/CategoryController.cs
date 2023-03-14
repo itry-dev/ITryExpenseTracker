@@ -1,8 +1,11 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ITryExpenseTracker.Core.Features.Categories.Queries.GetCategory;
+using ITryExpenseTracker.Core.Features.Categories.Queries.GetCategories;
 using ITryExpenseTracker.Core.Features.Categories.Delete;
+using ITryExpenseTracker.Core.InputModels;
+using ITryExpenseTracker.Core.Features.Categories.AddNew;
+using ITryExpenseTracker.Core.Features.Categories.Update;
 
 namespace ITryExpenseTracker.Api.Controllers;
 
@@ -44,6 +47,34 @@ public class CategoryController : BaseController
             .ConfigureAwait(false);
 
         return Ok();
+    }
+    #endregion
+
+    #region AddNew
+    [HttpPost]
+    [Authorize(Policy = "RequireAdministratorRole")]
+    public async Task<IActionResult> AddNew(CategoryInputModel model) 
+    {
+        //TODO check user exists and has permissions
+        var result = await _mediator
+            .Send(new AddNewCategoryCommand(model))
+            .ConfigureAwait(false);
+
+        return Ok(result);
+    }
+    #endregion
+
+    #region Update
+    [HttpPut("{id:guid}")]
+    [Authorize(Policy = "RequireAdministratorRole")]
+    public async Task<IActionResult> Update(Guid id, CategoryInputModel model) {
+        //TODO check user exists and has permissions
+        model.Id = id;
+        var result = await _mediator
+            .Send(new UpdateCategoryCommand(model))
+            .ConfigureAwait(false);
+
+        return Ok(result);
     }
     #endregion
 }
