@@ -47,58 +47,78 @@ public class UserService : IUserService
 
         if (! await _roleManager.RoleExistsAsync(roleName).ConfigureAwait(false))
         {
-            await _roleManager.CreateAsync(new ApplicationUserRole
+            var result = await _roleManager.CreateAsync(new ApplicationUserRole
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = roleName,
                 NormalizedName = roleName.ToUpper()
             });
+
+            if (!result.Succeeded) {
+                throw new InvalidRoleException(string.Join(",",result.Errors));
+            }
         }
         
     }
     #endregion
 
     #region AddNewUserAsync
-    public async Task<NewUserOutputModel> AddNewUserAsync(NewUserInputModel model)
+    public async Task<UserOutputModel> AddNewUserAsync(UserInputModel model)
     {
-        var exists = await _userManager.Users
-                        .Where(w => w.Email == model.Email)
-                        .AnyAsync()
-                        .ConfigureAwait(false);
+        var user = await _userManager.FindByEmailAsync(model.Email).ConfigureAwait(false);
 
-        if (exists)
+        if (user != null)
         {
             _logger.LogInformation($"A user with email {model.Email} already exists");
             throw new Exception("Cannot add user");
         }
 
-        var user = await _userManager.FindByEmailAsync(model.Email).ConfigureAwait(false);
 
-        if (user == null)
-        {
-            user = new ApplicationUser
-            {
-                Id = model.UserId != Guid.Empty ? model.UserId.ToString() : Guid.NewGuid().ToString(),
-                Email = model.Email,
-                Name= model.Name,
-                NormalizedEmail = model.Email.ToUpper(),
-                EmailConfirmed = model.EmailConfirmed,
-                UserName = model.UserName,
-                NormalizedUserName = model.UserName.ToUpper(),
-            };
-            user.PasswordHash = new PasswordHasher<ApplicationUser>().HashPassword(user, model.Password);
-            _db.Users.Add(user);
-            await _db.SaveChangesAsync().ConfigureAwait(false);
-
-            //ruolo
-            await _userManager.AddToRoleAsync(user, model.UserRole);
-        }        
-
-        return new NewUserOutputModel
-        {
-            Id = Guid.Parse(user.Id),
+        user = new ApplicationUser {
+            Id = model.UserId != Guid.Empty ? model.UserId.ToString() : Guid.NewGuid().ToString(),
             Email = model.Email,
             Name = model.Name,
+            NormalizedEmail = model.Email.ToUpper(),
+            EmailConfirmed = model.EmailConfirmed,
+            UserName = model.UserName,
+            NormalizedUserName = model.UserName.ToUpper(),
+        };
+        user.PasswordHash = new PasswordHasher<ApplicationUser>().HashPassword(user, model.Password);
+        _db.Users.Add(user);
+        await _db.SaveChangesAsync().ConfigureAwait(false);
+
+        //ruolo
+        var result = await _userManager.AddToRoleAsync(user, model.UserRole);
+
+        if (!result.Succeeded) {
+            _db.Users.Remove(user);
+            await _db.SaveChangesAsync().ConfigureAwait(false);
+
+            throw new UserNotAddedException(model.Email);
+        }
+
+        return new UserOutputModel
+        {
+            Id = user.Id,
+            Email = model.Email,
+            Name = model.Name,
+        };
+    }
+    #endregion
+
+    #region GetUser
+    public async Task<UserOutputModel?> GetUser(string userName) {
+        var user = await _userManager.FindByNameAsync(userName)
+                    .ConfigureAwait(false);
+
+        if (user == null) {
+            return null;
+        }
+
+        return new UserOutputModel {
+            Id = user.Id,
+            Email = user.Email,
+            Name = user.Name
         };
     }
     #endregion

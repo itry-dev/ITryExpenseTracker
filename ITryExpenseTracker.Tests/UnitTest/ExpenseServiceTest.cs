@@ -40,19 +40,20 @@ public class ExpenseServiceTest : BaseUnitTest
                             .CountAsync()
                             .ConfigureAwait(false);
 
-        Assert.True(numOcc == 1);
-
         //expSvc should not add the already added recurring expense
         await expSvc.ScanAndCopyRecurringExpenses();
 
-        numOcc = await DbContext.Expenses.Where(
+        var numOcc2 = await DbContext.Expenses.Where(
                             w => w.Date.Month == expModel.Date.Value.AddMonths(1).Month
                             && w.Title == expModel.Title
                             && w.Amount == expModel.Amount)
                             .CountAsync()
                             .ConfigureAwait(false);
 
+        
+
         Assert.True(numOcc == 1);
+        Assert.True(numOcc2 == 1);
 
     }
 }

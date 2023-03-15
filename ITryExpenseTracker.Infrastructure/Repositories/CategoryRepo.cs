@@ -65,7 +65,7 @@ public class CategoryRepo : ICategoryRepo
             throw new CategoryExistsException(model.Name);
         }
 
-        var c = new Category
+        var category = new Category
         {
             Id = Guid.NewGuid(),
             Name = model.Name,
@@ -73,13 +73,14 @@ public class CategoryRepo : ICategoryRepo
             CreatedBy = "CategoryRepo"
         };
 
-        _db.Categories.Add(c);
+        _db.Categories.Add(category);
 
 
         await _db.SaveChangesAsync()
                 .ConfigureAwait(false);
 
-        return new CategoryOutputModel { Id = c.Id, Name = model.Name };
+        return _mapperService.MapModel(category);
+
     }
     #endregion
 
@@ -100,10 +101,8 @@ public class CategoryRepo : ICategoryRepo
         await _db.SaveChangesAsync()
                 .ConfigureAwait(false);
 
-        return new CategoryOutputModel {
-            Id = row.Id,
-            Name = model.Name
-        };
+        return _mapperService.MapModel(row);
+
     }
     #endregion
 
@@ -140,4 +139,23 @@ public class CategoryRepo : ICategoryRepo
     }
     #endregion
 
+    #region GetCategoryByNameAsync
+    public async Task<CategoryOutputModel?> GetCategoryByNameAsync(string name) {
+
+        if (string.IsNullOrEmpty(name)) {
+            throw new ArgumentNullException("category name cannot be null or empty");
+        }
+
+        var category = await _db.Categories
+                        .Where(w => w.Name.ToLower() == name.ToLower())
+                        .FirstOrDefaultAsync()
+                        .ConfigureAwait(false);
+
+        if (category != null) {
+            return _mapperService.MapModel(category);
+        }
+
+        return null;
+    }
+    #endregion
 }

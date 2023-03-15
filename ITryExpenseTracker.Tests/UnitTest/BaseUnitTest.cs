@@ -130,6 +130,7 @@ public class BaseUnitTest : BaseTestClass, IDisposable
         DbContext.Users.RemoveRange(DbContext.Users);
         DbContext.Roles.RemoveRange(DbContext.Roles);
         DbContext.Categories.RemoveRange(DbContext.Categories);
+        DbContext.Suppliers.RemoveRange(DbContext.Suppliers);
         DbContext.SaveChanges();
     }
 }

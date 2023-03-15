@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ITryExpenseTracker.Core.Authentication.Abstractions.InputModels;
 
-public class NewUserInputModel
+public class UserInputModel
 {
     public string Name { get; set; } = "";
 

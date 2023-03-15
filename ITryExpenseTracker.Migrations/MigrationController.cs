@@ -76,7 +76,7 @@ public class MigrationController : ControllerBase
 
             try
             {
-                await _userService.AddNewUserAsync(new Core.Authentication.Abstractions.InputModels.NewUserInputModel
+                await _userService.AddNewUserAsync(new Core.Authentication.Abstractions.InputModels.UserInputModel
                 {
                     Email = model.AdminEmail,
                     Name = model.AdminName,

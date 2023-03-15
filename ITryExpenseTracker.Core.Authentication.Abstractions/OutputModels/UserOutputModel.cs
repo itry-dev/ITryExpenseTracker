@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ITryExpenseTracker.Core.Authentication.Abstractions.OutputModels;
 
-public class NewUserOutputModel
+public class UserOutputModel
 {
-    public Guid Id { get; set; }
+    public string Id { get; set; }
 
     public string Email { get; set; } = "";
 

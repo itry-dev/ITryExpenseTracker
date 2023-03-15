@@ -14,6 +14,8 @@ public interface IUserService
 
     Task AddNewRoleAsync(string roleName);
 
-    Task<NewUserOutputModel> AddNewUserAsync(NewUserInputModel model);
+    Task<UserOutputModel> AddNewUserAsync(UserInputModel model);
+
+    Task<UserOutputModel?> GetUser(string userName);  
 
 }

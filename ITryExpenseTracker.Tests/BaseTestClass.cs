@@ -27,9 +27,9 @@ public class BaseTestClass
     protected ILoggerFactory LoggerFactory = new NullLoggerFactory();
     
     #region GetUserInputModel
-    protected NewUserInputModel GetUserInputModel(Guid userId, string username, string password, string role, string email = null)
+    protected UserInputModel GetUserInputModel(Guid userId, string username, string password, string role, string email = null)
     {
-        return new NewUserInputModel
+        return new UserInputModel
         {
             UserId = userId,
             Email = email ?? Guid.NewGuid().ToString().Replace("-","")+"@bar",
@@ -45,26 +45,26 @@ public class BaseTestClass
     #region GetLoginRoute
     protected string GetLoginRoute()
     {
-        return "private/api/v1/login";
+        return "/private/api/v1/login";
     }
     #endregion
 
     #region GetCategoriesRoute
     protected string GetCategoriesRoute() {
-        return "private/api/v1/categories";
+        return "/private/api/v1/categories";
     }
     #endregion
 
     #region GetSuppliersRoute
     protected string GetSuppliersRoute() {
-        return "private/api/v1/suppliers";
+        return "/private/api/v1/suppliers";
     }
     #endregion
 
     #region GetRecurringExpenseMainRoute
     protected string GetRecurringExpensesMainRoute()
     {
-        return "private/api/v1/recurringexpenses";
+        return "/private/api/v1/recurringexpenses";
     }
     #endregion
 

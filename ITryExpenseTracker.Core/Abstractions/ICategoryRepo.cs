@@ -19,4 +19,6 @@ public interface ICategoryRepo
     Task<CategoryOutputModel> AddCategoryAsync(CategoryInputModel model, bool throwIfExists = true);
 
     Task<CategoryOutputModel?> UpdateCategoryAsync(CategoryInputModel model);
+
+    Task<CategoryOutputModel?> GetCategoryByNameAsync(string name);
 }

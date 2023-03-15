@@ -8,11 +8,14 @@ using ITryExpenseTracker.Infrastructure;
 using ITryExpenseTracker.Infrastructure.Models;
 using ITryExpenseTracker.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Any;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -31,19 +34,28 @@ public class BaseIntegrationTest
 
     protected readonly Guid ADMIN_ID = Guid.Parse("6dd09a10-9f26-4f38-ac94-376a52217b4d");
 
-    protected readonly Guid CATEGORY_GENERAL_ID = Guid.Parse("e1a4b32f-cf30-44b6-bce4-40deb6e37cf7");
-
-    protected IExpenseRepo ExpRepo;
+    protected readonly IUserService UserService;
+    protected readonly IExpenseRepo ExpenseRepo;
+    protected readonly ICategoryRepo CategoryRepo;
+    protected readonly ISupplierRepo SupplierRepo;
+    protected readonly DataContext TheDataContext;
 
     public BaseIntegrationTest(CustomWebApplicationFactory<Program> factory)
     {
         Factory = factory;
+
         HttpClient = factory.CreateClient(new WebApplicationFactoryClientOptions
         {
             AllowAutoRedirect = false
         });
 
-        ExpRepo = Factory.Services.CreateScope().ServiceProvider.GetRequiredService<IExpenseRepo>();
+        var scope = Factory.Services.CreateScope();
+        var scopedServices = scope.ServiceProvider;
+        UserService = scopedServices.GetRequiredService<IUserService>();
+        ExpenseRepo = scopedServices.GetRequiredService<IExpenseRepo>();
+        CategoryRepo = scopedServices.GetRequiredService<ICategoryRepo>();
+        SupplierRepo = scopedServices.GetRequiredService<ISupplierRepo>();
+        TheDataContext = scopedServices.GetRequiredService<DataContext>();
 
         _seedDb().GetAwaiter().GetResult();
     }
@@ -51,9 +63,14 @@ public class BaseIntegrationTest
     #region _seedDb
     private async Task _seedDb()
     {
-        await AddUserWithRole(ADMIN_ID, ADMIN_USER_NAME, ADMIN_USER_PASSWORD, ITryExpenseTracker.Core.Constants.UserRoles.ADMIN);
+        await ClearDbData()
+            .ConfigureAwait(false);
 
-        await AddNewCategoryToDb(CATEGORY_GENERAL_ID, "General");
+        await AddUserWithRole(ADMIN_ID, ADMIN_USER_NAME, ADMIN_USER_PASSWORD, ITryExpenseTracker.Core.Constants.UserRoles.ADMIN)
+            .ConfigureAwait(false);
+
+        await AddNewCategoryToDb("General")
+            .ConfigureAwait(false);
     }
     #endregion
 
@@ -62,29 +79,22 @@ public class BaseIntegrationTest
     {
         _checkUserRole(role);
 
-        using (var scope = Factory.Services.CreateScope())
-        {
-            var scopedServices = scope.ServiceProvider;
-            var userService = scopedServices.GetRequiredService<IUserService>();
+        var dbUser = await UserService.GetUser(username);
+        if (dbUser == null) {
+            await UserService.AddNewRoleAsync(role);
 
-            await userService.AddNewRoleAsync(role);
+            dbUser = await UserService.AddNewUserAsync(GetUserInputModel(userId, username, password, role));
 
-            var response = await userService.AddNewUserAsync(GetUserInputModel(userId, username, password, role));
-
-            return new ApplicationUser
-            {
-                Id = response.Id.ToString(),
-                UserName = response.Name,
-                Email = response.Email
-            };
+            Assert.NotNull(dbUser);
+            Assert.True(!string.IsNullOrEmpty(dbUser.Id));
         }
-    }
-    #endregion
 
-    #region GetDatabase
-    protected DataContext GetDatabase()
-    {
-        return Factory.Services.GetRequiredService<DataContext>();
+
+        return new ApplicationUser {
+            Id = dbUser.Id.ToString(),
+            UserName = dbUser.Name,
+            Email = dbUser.Email
+        };
     }
     #endregion
 
@@ -100,6 +110,10 @@ public class BaseIntegrationTest
         var loginModel = new LoginInputModel { UserName = username ?? ADMIN_USER_NAME, Password = password ?? ADMIN_USER_PASSWORD };
         var response = await HttpClient.PostAsync(GetLoginRoute(), new StringContent(GetJsonFromModel(loginModel), Encoding.UTF8, "application/json"));
 
+        var serverResponse = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+        Assert.True(response.IsSuccessStatusCode);
+        
         var loginResponse = System.Text.Json.JsonSerializer.Deserialize<LoginOutputModel>(
             await response.Content
             .ReadAsStringAsync());
@@ -114,66 +128,64 @@ public class BaseIntegrationTest
     #endregion
 
     #region AddNewCategoryToDb
-    protected async Task<Category> AddNewCategoryToDb(Guid categoryId, string name)
+    protected async Task<CategoryOutputModel> AddNewCategoryToDb(string name)
     {
-        using (var scope = Factory.Services.CreateScope())
-        {
-            var scopedServices = scope.ServiceProvider;
-            var db = scopedServices.GetRequiredService<DataContext>();
+        var category = await CategoryRepo.GetCategoryByNameAsync(name);
 
-            var category = new Infrastructure.Models.Category
-            {
-                Id = categoryId,
+        if (category == null) {
+            var inCategory = new CategoryInputModel {
                 Name = name
             };
-
-            db.Categories.Add(category);
-
-            await db.SaveChangesAsync()
-                .ConfigureAwait(false);
-
-            return category;
+            return await CategoryRepo.AddCategoryAsync(inCategory);
         }
+
+        return category;
+        
     }
     #endregion
 
     #region AddNewExpenseToDb
-    protected async Task<ExpenseOutputModel> AddNewExpenseToDb(Guid userId, Guid? expenseId = null, string title = "test", decimal amount = 1, Guid? categoryId = null, DateTime? date = null)
+    protected async Task<ExpenseOutputModel> AddNewExpenseToDb(Guid userId, Guid categoryId, Guid? expenseId = null, string title = "test", decimal amount = 1, DateTime? date = null)
     {
+        ExpenseOutputModel outModel = null;
 
-        var model = new ExpenseInputModel
-        {
-            Id = expenseId ?? Guid.NewGuid(),
-            Title = title,
-            Amount = amount,
-            CategoryId = categoryId ?? CATEGORY_GENERAL_ID,
-            Date = date ?? DateTime.UtcNow            
-        };
+        if (expenseId.HasValue) {
+            outModel = await ExpenseRepo.GetExpenseAsync(userId.ToString(), expenseId.Value);
+        }
 
-        return await ExpRepo.AddNewAsync(userId.ToString(), model);
+        if (outModel == null) {
+            var model = new ExpenseInputModel {
+                Id = expenseId ?? Guid.NewGuid(),
+                Title = title,
+                Amount = amount,
+                CategoryId = categoryId,
+                Date = date ?? DateTime.UtcNow
+            };
+
+            outModel = await ExpenseRepo.AddNewAsync(userId.ToString(), model);
+        }
+
+
+        return outModel;
     }
     #endregion
 
     #region ClearDbData
     protected async Task ClearDbData()
     {
-        using (var scope = Factory.Services.CreateScope())
-        {
-            var scopedServices = scope.ServiceProvider;
-            var db = scopedServices.GetRequiredService<DataContext>();
+        TheDataContext.Expenses.RemoveRange(TheDataContext.Expenses);
 
-            db.Expenses.RemoveRange(db.Expenses.ToList());
+        TheDataContext.Categories.RemoveRange(TheDataContext.Categories);
 
-            db.Categories.RemoveRange(db.Categories.ToList());
+        TheDataContext.Suppliers.RemoveRange(TheDataContext.Suppliers);
 
-            db.UserRoles.RemoveRange(db.UserRoles.ToList());
-            db.Roles.RemoveRange(db.Roles.ToList());
+        TheDataContext.UserRoles.RemoveRange(TheDataContext.UserRoles);
+        TheDataContext.Roles.RemoveRange(TheDataContext.Roles);
 
-            db.Users.RemoveRange(db.Users.ToList());
+        TheDataContext.Users.RemoveRange(TheDataContext.Users);
 
-            await db.SaveChangesAsync()
-                .ConfigureAwait(false);
-        }
+        await TheDataContext.SaveChangesAsync()
+            .ConfigureAwait(false);
     }
     #endregion
 
