@@ -128,7 +128,11 @@ public class ExpenseRepo : IExpenseRepo
             throw new ExpenseNotFoundException(model.Id.GetValueOrDefault().ToString());
         }
 
+        dbModel.Updated = DateTime.UtcNow;
+        dbModel.UpdatedBy = userId;
+
         _db.Entry(dbModel).CurrentValues.SetValues(model);
+        
         await _db.SaveChangesAsync().ConfigureAwait(false);
     }
     #endregion
@@ -150,7 +154,7 @@ public class ExpenseRepo : IExpenseRepo
             CreatedAt = DateTime.UtcNow,
             StartDate = model.StartDate ?? null,
             EndDate = model.EndDate ?? null,
-            CreatedBy = _system
+            CreatedBy = userId
         };
 
         _db.Expenses.Add(entity);
@@ -246,7 +250,7 @@ public class ExpenseRepo : IExpenseRepo
             if (filter.Page <= 0) filter.Page = 1;
         }
 
-        var query = _db.Expenses.Where(w => w.ApplicationUserId == userId);
+        var query = _db.Expenses.FilterByUserId(userId);
 
         if (!string.IsNullOrEmpty(filter.Q))
         {
@@ -312,7 +316,9 @@ public class ExpenseRepo : IExpenseRepo
                             Category = s.Category,
                             Supplier = s.Supplier,
                             Date = s.Date,
-                            Amount = s.Amount
+                            Amount = s.Amount,
+                            CreatedAt = s.CreatedAt,
+                            Updated = s.Updated.HasValue && s.Updated.Value != DateTime.MinValue ? s.Updated.Value : null
                         })
                         .FirstAsync();
 

@@ -22,6 +22,10 @@ public class ExpenseOutputModel
 
     public string Notes { get; set; } = null;
 
+    public DateTime CreatedAt { get; set; }
+
+    public DateTime Updated { get; set; }
+
     public CategoryOutputModel Category { get; set; } = null;
 
     public ExpenseOutputModel Supplier { get; set; } = null;

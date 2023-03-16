@@ -65,7 +65,7 @@ public static class AddCommandHandlersExtension
         services.AddScoped<IValidator<GetSumCommand>, GetSumCommandValidator>();
         #endregion
 
-        #region cagory command, handler
+        #region category command, handler
         services.AddMediatR(
         typeof(GetCategoriesCommand),
         typeof(GetCategoriesCommandHandler));
