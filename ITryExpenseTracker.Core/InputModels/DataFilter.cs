@@ -29,6 +29,11 @@ public class DataFilter
     /// </summary>
     public int? Day { get; set; } = null;
 
+    /// <summary>
+    /// Order by Date. Accepted values are: asc, desc. Default: asc
+    /// </summary>
+    public string OrderBy { get; set; } = "asc";
+
     public int PageSize { get; set; }
 
     public int Page { get; set; }
