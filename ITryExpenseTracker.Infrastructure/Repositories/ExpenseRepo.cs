@@ -99,8 +99,10 @@ public class ExpenseRepo : IExpenseRepo
 
         query = _getPaginatedQuery(query, filter.Page, filter.PageSize);
                 
-        var result = await query.ToListAsync()
-                           .ConfigureAwait(false);
+        var result = await query
+                            .OrderByDescending(o => o.Date)
+                            .ToListAsync()
+                            .ConfigureAwait(false);
 
         var modelOut = _mapperService.MapModels(result
                                         .Cast<IModelEntity>()
@@ -251,6 +253,8 @@ public class ExpenseRepo : IExpenseRepo
         }
 
         var query = _db.Expenses.FilterByUserId(userId);
+
+
 
         if (!string.IsNullOrEmpty(filter.Q))
         {

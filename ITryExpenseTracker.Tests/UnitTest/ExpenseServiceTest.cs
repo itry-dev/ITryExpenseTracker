@@ -9,6 +9,7 @@ namespace ITryExpenseTracker.Tests.UnitTest;
 
 public class ExpenseServiceTest : BaseUnitTest
 {
+    #region recurring_expense_added_once_per_month_test
     [Fact]
     public async Task recurring_expense_added_once_per_month_test()
     {
@@ -34,8 +35,8 @@ public class ExpenseServiceTest : BaseUnitTest
         await expSvc.ScanAndCopyRecurringExpenses();
 
         var numOcc = await DbContext.Expenses.Where(
-                            w => w.Date.Month == expModel.Date.Value.AddMonths(1).Month  
-                            && w.Title == expModel.Title 
+                            w => w.Date.Month == expModel.Date.Value.AddMonths(1).Month
+                            && w.Title == expModel.Title
                             && w.Amount == expModel.Amount)
                             .CountAsync()
                             .ConfigureAwait(false);
@@ -50,10 +51,11 @@ public class ExpenseServiceTest : BaseUnitTest
                             .CountAsync()
                             .ConfigureAwait(false);
 
-        
+
 
         Assert.True(numOcc == 1);
         Assert.True(numOcc2 == 1);
 
-    }
+    } 
+    #endregion
 }
