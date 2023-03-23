@@ -33,4 +33,9 @@ public class DataFilter
 
     public int Page { get; set; }
 
+    /// <summary>
+    /// Accepted values: asc, desc (default)
+    /// </summary>
+    public string OrderBy { get; set; } = "desc";
+
 }
