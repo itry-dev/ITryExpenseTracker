@@ -99,7 +99,7 @@ public class ExpenseRepo : IExpenseRepo
 
         query = _getPaginatedQuery(query, filter.Page, filter.PageSize);
                 
-        if (!string.IsNullOrEmpty(filter.OrderBy) || filter.OrderBy.ToLower() == "asc")
+        if (string.IsNullOrEmpty(filter.OrderBy) || filter.OrderBy.ToLower() == "asc")
         {
             query = query.OrderBy(o => o.Date);
         }
