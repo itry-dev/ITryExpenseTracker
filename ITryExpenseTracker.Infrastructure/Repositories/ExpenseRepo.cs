@@ -99,8 +99,16 @@ public class ExpenseRepo : IExpenseRepo
 
         query = _getPaginatedQuery(query, filter.Page, filter.PageSize);
                 
+        if (!string.IsNullOrEmpty(filter.OrderBy) || filter.OrderBy.ToLower() == "asc")
+        {
+            query = query.OrderBy(o => o.Date);
+        }
+        else
+        {
+            query = query.OrderByDescending(o => o.Date);
+        }
+
         var result = await query
-                            .OrderByDescending(o => o.Date)
                             .ToListAsync()
                             .ConfigureAwait(false);
 
